@@ -2,7 +2,10 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const superagent = require('superagent');
+const pg = require('pg');
 
+const client = new pg.Client(process.env.DB_CONNECTION_STRING);
+client.connect();
 
 const app = express();
 app.use(cors());
@@ -33,7 +36,7 @@ let weathers = [];
 class Weather {
 	constructor(json) {
 		this.forecast = json.summary;
-		this.day = new Date(json.time * 1000).toString().slice(0,15);
+		this.day = new Date(json.time * 1000).toString().slice(0, 15);
 	}
 }
 
@@ -52,24 +55,31 @@ class Location {
 // const geoData = require('./data/geo.json');
 // const weatherData = require('./data/darksky.json');
 
-app.get('/location', (req, res) => {
+app.get('/location', (request, response) => {
 	try {
-		superagent.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${req.query.data}&key=${process.env.GEOCODEAPI_KEY}`)
-			.then((geoData) => {
-				console.log(geoData);
-					const location = new Location(req.query.location, geoData.body);
-					res.send(location)
-				});
-				// const location = new Location(req.query.location, geoData);
-				
-			}
-		catch (error) {
-			res.status(500).send({
-				status: 500,
-				responseText: error.message
+		const SQL = 'SELECT * FROM locations WHERE search_query=$1;';
+		const VALUES = [request.query.data];
 
-			});
-		}
+		client.query(SQL, VALUES).then(results => {
+			if (results.rows.length === 0) {
+				superagent.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${request.query.data}&key=${process.env.GEOCODEAPI_KEY}`)
+					.then((geoData) => {
+						const location = new Location(request.query.location, geoData.body);
+						SQL = 'INSERT INTO locations (search_query, formatted_query, latitude, longitude) VALUES($1, $2, $3, $4)'
+						VALUES = Object.values(location);
+						client.query(SQL, VALUES);
+						response.send(location);
+					});
+			}
+		});
+	}
+	catch (error) {
+		response.status(500).send({
+			status: 500,
+			responseText: error.message
+
+		});
+	}
 });
 
 app.get('/weather', (req, res) => {
@@ -83,8 +93,8 @@ app.get('/weather', (req, res) => {
 				})
 				res.send(weather)
 			});
-		}
-		catch (error) {
+	}
+	catch (error) {
 		res.status(500).send({
 			status: 500,
 			responseText: error.message
