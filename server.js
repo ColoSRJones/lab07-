@@ -36,6 +36,8 @@ class Weather {
 	}
 }
 
+
+
 console.log('Hello?');
 
 class Location {
@@ -76,7 +78,7 @@ app.get('/weather', (req, res) => {
 		superagent.get(`https://api.darksky.net/forecast/${process.env.DARKSKYAPI_KEY}/${req.query.data.latitude},${req.query.data.longitude}`)
 			.then((weatherData) => {
 				console.log(weatherData);
-				const weather = new Weather(req.query.weather,weatherData.body);
+				const weather = new Weather(req.query.weather, weatherData.body);
 				res.send(weather)
 			});
 		}
