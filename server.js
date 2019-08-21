@@ -31,12 +31,9 @@ let weathers = [];
 */
 
 class Weather {
-	constructor(query, json) {
-		this.search_query = query;
-		this.day = json.daily.data.map(function(json) {
-			let forecast = summary;
-			let day = time;
-		})
+	constructor(json) {
+		this.forecast = json.summary;
+		this.day = new Date(json.time * 1000).toString().slice(0,15);
 	}
 }
 
@@ -77,14 +74,17 @@ app.get('/location', (req, res) => {
 
 app.get('/weather', (req, res) => {
 	try {
+		console.log(req.query.data);
 		superagent.get(`https://api.darksky.net/forecast/${process.env.DARKSKYAPI_KEY}/${req.query.data.latitude},${req.query.data.longitude}`)
 			.then((weatherData) => {
-				console.log(weatherData);
-				const weather = new Weather(req.query.weather, weatherData.body);
+				console.log(weatherData.body.daily.data);
+				let weather = weatherData.body.daily.data.map((day) => {
+					return new Weather(day);
+				})
 				res.send(weather)
 			});
 		}
-		 catch (error) {
+		catch (error) {
 		res.status(500).send({
 			status: 500,
 			responseText: error.message
