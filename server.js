@@ -20,11 +20,7 @@ app.use(cors());
   ...
 ]
 
-*/
-
-class Weather {
-	constructor(json) {
-		let weathers = [];
+let weathers = [];
 		for (const day of json['daily']['data']) {
 			const date = new Date(day.time * 1000);
 			weathers.push({
@@ -32,7 +28,12 @@ class Weather {
 				'time': date.toString().slice(0, 15),
 			});
 		}
-		this.weather = weathers;
+*/
+
+class Weather {
+	constructor(json) {
+		this.forecast = json.summary;
+		this.day = new Date(json.time * 1000).toString().slice(0,15);
 	}
 }
 
@@ -86,14 +87,19 @@ superagent.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${req.
 
 app.get('/weather', (req, res) => {
 	try {
+		console.log(req.query.data);
 		superagent.get(`https://api.darksky.net/forecast/${process.env.DARKSKYAPI_KEY}/${req.query.data.latitude},${req.query.data.longitude}`)
 			.then((weatherData) => {
-				console.log(weatherData);
-				const weather = new Weather(req.query.weather, weatherData.body);
+
+				console.log(weatherData.body.daily.data);
+				let weather = weatherData.body.daily.data.map((day) => {
+					return new Weather(day);
+				})
+
 				res.send(weather)
 			});
 		}
-		 catch (error) {
+		catch (error) {
 		res.status(500).send({
 			status: 500,
 			responseText: error.message
