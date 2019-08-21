@@ -90,15 +90,14 @@ app.get('/weather', (req, res) => {
 		console.log(req.query.data);
 		superagent.get(`https://api.darksky.net/forecast/${process.env.DARKSKYAPI_KEY}/${req.query.data.latitude},${req.query.data.longitude}`)
 			.then((weatherData) => {
-<<<<<<< HEAD
+
 				console.log(weatherData);
 				const weather = new Weather(req.query.weather, weatherData.body);
-=======
+
 				console.log(weatherData.body.daily.data);
 				let weather = weatherData.body.daily.data.map((day) => {
 					return new Weather(day);
 				})
->>>>>>> feeb97dcaebaf4d481aa0b6b643a9fe475159afa
 				res.send(weather)
 			});
 		}
