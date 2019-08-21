@@ -55,12 +55,23 @@ class Location {
 
 app.get('/location', (req, res) => {
 	try {
-		superagent.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${req.query.data}&key=${process.env.GEOCODEAPI_KEY}`)
+		let SQL = 'SELECT * FROM locations WHERE seach_query=$1';
+		let VALUES = [req.query.data];
+
+		client.query(SQL, VALUES).then(res => {
+			if(res.rows.length = 0){
+superagent.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${req.query.data}&key=${process.env.GEOCODEAPI_KEY}`)
 			.then((geoData) => {
-				console.log(geoData);
 					const location = new Location(req.query.location, geoData.body);
-					res.send(location)
+					SQL = 'INSERT INTO locations (search_query, formatted_query, latitude, longitude) VALUES($1,$2,$3,$4)'
+					VALUES = Object.values(location);
+					client.query(SQL, VALUES);
+					res.send(location);
 				});
+			}
+		})
+
+		
 				// const location = new Location(req.query.location, geoData);
 				
 			}
