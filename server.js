@@ -73,15 +73,20 @@ app.get('/location', (req, res) => {
 
 app.get('/weather', (req, res) => {
 	try {
-		const weather = new Weather(weatherData);
-		res.send(weather.weather);
+		superagent.get(`https://api.darksky.net/forecast/${process.env.DARKSKYAPI_KEY}/${req.query.data.latitude},${req.query.data.longitude}`)
+			.then((weatherData) => {
+				console.log(weatherData);
+		const weather = new Weather(req.query.weather,weatherData.body);
+		res.send(weather);
+
+		
 	} catch (error) {
 		res.status(500).send({
 			status: 500,
 			responseText: error.message
 		});
 	}
-});
+);
 
 const PORT = process.env.PORT || 3000;
 
