@@ -1,38 +1,25 @@
-# Lab 06: Node, npm, and Express
+# Project Name
 
-## Resources
+**Author**: Steven Jones & Jon Struve
+**Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
 
-[Node JS Docs](https://nodejs.org/en/)
+## Overview
+<!-- Provide a high level overview of what this application is and why you are building it, beyond the fact that it's an assignment for this class. (i.e. What's your problem domain?) -->
 
-[NPM JS Docs](https://docs.npmjs.com/)
+## Getting Started
+<!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
 
-[Express JS Docs](http://expressjs.com/en/4x/api.html)
+## Architecture
+<!-- Provide a detailed description of the application design. What technologies (languages, libraries, etc) you're using, and any other relevant design information. -->
 
-[Dotenv Docs](https://www.npmjs.com/package/dotenv)
+## Change Log
+<!-- Use this area to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an examples:
 
-## Configuration
+01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource.
 
-- `data` directory - with [geo.json](https://codefellows.github.io/code-301-guide/curriculum/class-06/lab/starter-code/data/geo.json) and [darksky.json](https://codefellows.github.io/code-301-guide/curriculum/class-06/lab/starter-code/data/darksky.json)
-- `.env` - with your PORT. Make sure this file is in your `.gitignore`.
-- `README.md` - with documentation regarding your lab and its current state of development. Check the "documentation" section below for more details on how that should look **AT MINIMUM**
-- `.gitignore` - with standard NodeJS configurations
-- `.eslintrc.json` - with Code 301 course standards for the linter
-- `package.json` - with all dependencies and any associated details related to configuration. The dependencies needed for today's lab include: `express`, `cors`, and `dotenv`.
-- Note that the `package-lock.json` file is automatically created when dependencies are installed and ensures that future installations of the project use the same versions of the dependencies.
-
-
-```sh
-lab-06-repository
-   ├── data
-   |     ├── darksky.json
-   |     └── geo.json
-   ├── .env
-   ├── .eslintrc.json
-   ├── .gitignore
-   ├── package-lock.json
-   ├── package.json
-   └── server.js
-```
+## Credits and Collaborations
+<!-- Give credit (and a link) to other people or resources that helped you build this application. -->
+-->
 
 ## User Acceptance Tests
 
