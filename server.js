@@ -20,11 +20,7 @@ app.use(cors());
   ...
 ]
 
-*/
-
-class Weather {
-	constructor(json) {
-		let weathers = [];
+let weathers = [];
 		for (const day of json['daily']['data']) {
 			const date = new Date(day.time * 1000);
 			weathers.push({
@@ -32,7 +28,15 @@ class Weather {
 				'time': date.toString().slice(0, 15),
 			});
 		}
-		this.weather = weathers;
+*/
+
+class Weather {
+	constructor(query, json) {
+		this.search_query = query;
+		this.day = json.daily.data.map(function(json) {
+			let forecast = summary;
+			let day = time;
+		})
 	}
 }
 
@@ -76,7 +80,7 @@ app.get('/weather', (req, res) => {
 		superagent.get(`https://api.darksky.net/forecast/${process.env.DARKSKYAPI_KEY}/${req.query.data.latitude},${req.query.data.longitude}`)
 			.then((weatherData) => {
 				console.log(weatherData);
-				const weather = new Weather(req.query.weather,weatherData.body);
+				const weather = new Weather(req.query.weather, weatherData.body);
 				res.send(weather)
 			});
 		}
