@@ -57,19 +57,27 @@ class Location {
 
 app.get('/location', (request, response) => {
 	try {
-		const SQL = 'SELECT * FROM locations WHERE search_query=$1;';
-		const VALUES = [request.query.data];
+		let SQL = 'SELECT * FROM locations WHERE search_query=$1;';
+		let VALUES = [request.query.data];
+
+		console.log(request.query.data);
 
 		client.query(SQL, VALUES).then(results => {
+			console.log("RESULTS", results.rows);
 			if (results.rows.length === 0) {
 				superagent.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${request.query.data}&key=${process.env.GEOCODEAPI_KEY}`)
 					.then((geoData) => {
 						const location = new Location(request.query.location, geoData.body);
 						SQL = 'INSERT INTO locations (search_query, formatted_query, latitude, longitude) VALUES($1, $2, $3, $4)'
 						VALUES = Object.values(location);
-						client.query(SQL, VALUES);
-						response.send(location);
+						client.query(SQL, VALUES).then(results => {
+							console.log(results);
+							response.send(location);
+						});
 					});
+			} else {
+				console.log('I came from database')
+				response.send(results);
 			}
 		});
 	}
