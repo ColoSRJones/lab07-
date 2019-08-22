@@ -1,24 +1,29 @@
+'use strict';
+
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const superagent = require('superagent');
+const ( Client ) = require('pg');
 
 
 const app = express();
-app.use(cors());
+const PORT = process.env.PORT || 3000;
+DARKSKYAPI_KEY = process.env.DARKSKYAPI_KEY;
+GEOCODEAPI_KEY = process.env.GEOCODEAPI_KEY;
+// EVENTBRITE_API_KEY = process.env.EVENTBRITE_API_KEY;
 
-/*
-[
-  {
-    "forecast": "Partly cloudy until afternoon.",
-    "time": "Mon Jan 01 2001"
-  },
-  {
-    "forecast": "Mostly cloudy in the morning.",
-    "time": "Tue Jan 02 2001"
-  },
-  ...
-]
+app.use(corgit s());
+
+// const client = new Client(process.env.DATABASE_URL);
+// client.connect();
+// client.on('err', err => console.log(err));
+
+// //Errors
+// function handleError(err, res) {
+// 	console.log('ERR', err);
+// 	if (res) res.status(500).send('Sorry, something went wrong');
+// }
 
 let weathers = [];
 		for (const day of json['daily']['data']) {
@@ -107,8 +112,29 @@ app.get('/weather', (req, res) => {
 		});
 	}
 });
+// app.get('/eventbrite', (req, res) => {
+// 	try {
+// 		console.log(req.query.data);
+// 		superagent.get(`https://www.eventbrite.com/oauth/authorize?response_type=token&client_id=${process.env.EVENTBRITE_API_KEY}/${req.query.data.latitude},${req.query.data.longitude}`)
+// 			.then((eventData) => {
 
-const PORT = process.env.PORT || 3000;
+// 				console.log(eventData.body.daily.data);
+// 				let event = eventData.body.daily.data.map((day) => {
+// 					return new Event(day);
+// 				})
+
+// 				res.send(EventSource)
+// 			});
+// 		}
+// 		catch (error) {
+// 		res.status(500).send({
+// 			status: 500,
+// 			responseText: error.message
+
+// 		});
+// 	}
+// });
+
 
 app.listen(PORT, () => {
 	console.log('Server has started...');
